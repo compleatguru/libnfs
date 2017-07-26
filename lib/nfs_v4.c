@@ -578,7 +578,7 @@ nfs4_lookup_path_1_cb(struct rpc_context *rpc, int status, void *command_data,
         COMPOUND4args args;
         nfs_argop4 *op;
         COMPOUND4res *res = command_data;
-        unsigned int i;
+        int i;
         int resolve_link = 0;
         char *path, *tmp;
 
@@ -614,7 +614,7 @@ nfs4_lookup_path_1_cb(struct rpc_context *rpc, int status, void *command_data,
                 return;
         }
 
-        for (i = 0; i < res->resarray.resarray_len; i++) {
+        for (i = 0; i < (int)res->resarray.resarray_len; i++) {
                 if (res->resarray.resarray_val[i].resop == OP_GETATTR) {
                         GETATTR4resok *garesok;
                         struct nfs_stat_64 st;
@@ -655,7 +655,7 @@ nfs4_lookup_path_1_cb(struct rpc_context *rpc, int status, void *command_data,
 
         /* Find the lookup that failed and the associated fh */
         data->link.idx = 0;
-        for (i = 0; i < res->resarray.resarray_len; i++) {
+        for (i = 0; i < (int)res->resarray.resarray_len; i++) {
                 if (res->resarray.resarray_val[i].resop == OP_LOOKUP) {
                         if (res->resarray.resarray_val[i].nfs_resop4_u.oplookup.status == NFS4ERR_SYMLINK) {
                                 break;
